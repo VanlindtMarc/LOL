@@ -109,6 +109,53 @@ function sum     (a,b=0,c=0,n)       = b<(n==undef?len(a):n)?sum(a=a,b=b+1,c=c+a
 ```
 function topct   (a)               = a/sum(a);
 ```
+## Sur vecteurs
+### divide
+```
+function divide         (a,b,c)         = [a[0]+(b[0]-a[0])*c, a[1]+(b[1]-a[1])*c];    
+```
+### join
+```
+function join(a) = [for(i=[0:len(a)-1] ) each a[i]];
+```
+### join2
+```
+function join2(aa) = [for(i=[0:len(aa)-1] ) each aa[i]];
+```
+### koch
+```
+function koch           (a,angle,maxit,it)       =  let(
+a=a[0]==a[len(a)-1]?a:concat(a,[a[0]]),
+b = [ for ( i = [ 0 : len(a)-2  ] ) [
+      a[i],
+      divide(a[i],a[i+1],1/3),
+      divide(a[i],a[i+1],1/3) + [
+        sin(myangle(a[i],a[i+1])-(angle==undef?60:angle<=60?60:angle>=180?180:angle))*length(a[i], a[i+1])/3,
+        cos(myangle(a[i],a[i+1])-(angle==undef?60:angle<=60?60:angle>=180?180:angle))*length(a[i],a[i+1])/3],
+ 
+  divide(a[i],a[i+1],2/3)+[sin(-90+myangle(a[i],a[i+1])-((90+(90-(angle<=60?60:angle>=180?180:angle)))))*length(a[i],a[i+1])/3,cos(-90+myangle(a[i],a[i+1])-(90+(90-(angle<=60?60:angle>=180?180:angle))))*length(a[i],a[i+1])/3],
+  divide(a[i],a[i+1],2/3),
+  a[i+1]
+  ]],
+  maxit=maxit==undef?0:maxit,
+  it=it==undef?0:it
+    ) 
+  it==maxit?clean(join2(b)):koch(a=clean(join2(b)),angle=angle,maxit=maxit,it=it+1);
+```
+### length
+```
+function length        (a,b)           = sqrt(((b[0]-a[0])*(b[0]-a[0]))+((b[1]-a[1])*(b[1]-a[1])));
+```
+### myangle
+```
+function myangle        (a,b)           = atan2(b[0]-a[0],b[1]-a[1]);
+```
+### normal
+```
+function normal    (a)             = a/(sqrt(a[0]*a[0]+a[1]*a[1]));
+```
+
+
 ---
 # Modules ajoutés
 
