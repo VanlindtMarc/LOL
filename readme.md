@@ -53,10 +53,37 @@ bipy      = sqrt(2);
 pi        = 3.141592654/1;
 tau       = pi*2;
 ```
+# Nouvelles fonctions
+## random
+```
+function random    (n,s,pos)       = rands(pos==undef?0:pos==true?0:-n,n,1,s==undef?n:s)[0];
+```
+## fibonacci
+```
+function fibonacci (n,a=0,b=1,c=1) = c<n+1?fibonacci(a=b,b=a+b,c=c+1,n=n):a;
+```
 
-## Modules ajoutés
+## hypo
+```
+function hypo      (a,b)           = sqrt((a*a)+(b*b));
+```
+## imaginary
+```
+function imaginary (a,b,c)         = (2*a*b)+c;    
+```
+## pair
+```
+function pair      (a)             = a%2==0?true:false;
+```
 
-### cnc
+## real
+```
+function real      (a,b,c)         = ((a*a)+(b*b))+c;
+```
+
+# Modules ajoutés
+
+## cnc
 ```
 module cnc(d,show,fn){
   show=show==undef?false:show;
@@ -85,7 +112,7 @@ module cnc(d,show,fn){
 }
 ```
 
-### chull
+## chull
 
 ```
 module chull                  (m){ 
@@ -99,7 +126,7 @@ module chull                  (m){
 }
 ```
 
-### fibo
+## fibo
 ```
 module fibo                   (s,n,r){
   r=r==undef?true:r;
@@ -116,7 +143,58 @@ module fibo                   (s,n,r){
 }
 ```
 
-### outline
+## grid
+```
+module grid                   (dim,x,y){
+  dim=dim==undef?[100,100]:dim;
+  x=x==undef?10:x;
+  y=y==undef?10:y;
+  for(i=[1:x-1])
+    translate([i*dim[0]/x,0,0])
+    rotate([-90,0,0])
+    linear_extrude(dim[1])
+    children();  
+ 
+  for(i=[1:y-1])
+    translate([0,i*dim[1]/y,0])
+    rotate([-90,0,-90])
+    linear_extrude(dim[0])
+    children();  
+}
+```
+
+
+## moebius
+```
+module moebius(d,t,fn){ // version 2.0
+  fn = fn == undef ? 128  :fn;
+  d = d == undef ? 30   :d;
+  t = t == undef ? 0.5 :t;
+  union(){
+   for(j=[0:$children-1])
+   {
+    for(i=[1:fn]){
+      hull(){
+        rotate([0,360/fn*i,0])
+        translate([d/2,0,0])
+        rotate([0,0,i*(360*t)/fn])
+        linear_extrude(0.1)
+        children(j);
+ 
+        rotate([0,360/fn*(i+1),0])
+        translate([d/2,0,0])
+        rotate([0,0,(i+1)*(360*t)/fn])
+        linear_extrude(0.1)
+        children(j);
+      }
+    }
+  }
+ }
+}
+```
+
+
+## outline
 ```
 module outline                (w,t){ 
   w=w==undef?1:w;
@@ -131,7 +209,7 @@ module outline                (w,t){
 }
 ```
 
-### pythatree
+## pythatree
 ```
 module pythatree              (a,h,sp,maxit,b,r1,r2,s,d,c1,c2,col){ 
   a  = a  == undef ? 45  : a; 
@@ -169,7 +247,7 @@ module pythatree              (a,h,sp,maxit,b,r1,r2,s,d,c1,c2,col){
 ```
 
 
-### ring
+## ring
 ```
 module ring                   (d,n,m){
   d=d==undef?10:d;
@@ -186,14 +264,14 @@ module ring                   (d,n,m){
 }
 ```
 
-### rotate2
+## rotate2
 ```
 module rotate2                (){
   rotate([45,90-atan(sqrt(2)),0])
   children();
 }
 ```
-### skew
+## skew
 ```
 module skew                   (XY,XZ,YX,YZ,ZX,ZY){  
   matrice=[ 
