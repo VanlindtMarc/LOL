@@ -114,14 +114,35 @@ function topct   (a)               = a/sum(a);
 ```
 function divide         (a,b,c)         = [a[0]+(b[0]-a[0])*c, a[1]+(b[1]-a[1])*c];    
 ```
+### fract
+```
+function fract(a,angle,in,maxit,it,close)= let( 
+	close=close==undef?true:close,
+	a=close==true?a[0]==a[len(a)-1]?a:concat(a,[a[0]]):a,
+  maxit=maxit==undef?3:maxit==0?1:maxit,
+    it=it==undef?0:it,
+		inside=in==undef?1:in==true?1:-1,
+    angle=angle==undef?60:angle,
+  b = [ for ( i = [ 0 : len(a)-2  ] ) [
+      a[i],
+      divide(a[i],a[i+1],angle/180), 
+      divide(a[i],a[i+1],angle/180) + 
+			[
+		sin(myangle(a[i],a[i+1]) + angle*inside) * (length(a[i],a[i+1])/3) ,	       
+		cos(myangle(a[i],a[i+1]) + angle*inside) * (length(a[i],a[i+1])/3)
+			], 
+      divide(a[i],a[i+1],1-(angle/180)),  
+      a[i+1]]
+    ]
+  )  
+  it+1==maxit?clean(join2(b)):fract(a=clean(join2(b)),angle=angle,in=in,maxit=maxit,it=it+1,close=close); 
+```
+
 ### join
 ```
 function join(a) = [for(i=[0:len(a)-1] ) each a[i]];
 ```
-### join2
-```
-function join2(aa) = [for(i=[0:len(aa)-1] ) each aa[i]];
-```
+
 ### koch
 ```
 function koch           (a,angle,maxit,it)       =  let(
@@ -360,3 +381,6 @@ module skew                   (XY,XZ,YX,YZ,ZX,ZY){
   }
 }
 ```
+
+# Nouvelles formes 
+Les nouvelles formes sont toutes à la fois des fonctions et des modules.
