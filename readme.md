@@ -56,6 +56,23 @@ tau       = pi*2;
 
 ## Modules ajoutés
 
+### fibo
+```
+module fibo                   (s,n,r){
+  r=r==undef?true:r;
+  s=s==undef?1:s;
+  n=n==undef?128:n;
+ 
+ 
+  for(i=[1:n]){
+    rotate([0,0,angledor*i])
+    translate([s*i,0,0])
+    scale(r==true?s+pow(1.003,i):1)
+    children();
+  }  
+}
+```
+
 ### outline
 ```
 module outline                (w,t){ 
@@ -105,5 +122,43 @@ module pythatree              (a,h,sp,maxit,b,r1,r2,s,d,c1,c2,col){
       children();
     };
   }
+}
+```
+
+### chull
+
+```
+module chull                  (m){ 
+  union()
+  for(i=[0:$children-2]){
+    hull(){
+      children(m==true?0:i);
+      children(i+1);
+    }
+  }
+}
+```
+### ring
+```
+module ring                   (d,n,m){
+  d=d==undef?10:d;
+  n=n==undef?5:n;
+  m=m==undef?0:m;
+  for(i=[0:n-1]){
+    rotate([0,0,360/n*i]){
+      translate([d/2,0,0])
+      rotate([0,0,m])
+      children();
+      echo(m);
+    }
+  }
+}
+```
+
+### rotate2
+```
+module rotate2                (){
+  rotate([45,90-atan(sqrt(2)),0])
+  children();
 }
 ```
