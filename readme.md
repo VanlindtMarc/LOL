@@ -56,6 +56,49 @@ tau       = pi*2;
 
 ## Modules ajoutés
 
+### cnc
+```
+module cnc(d,show,fn){
+  show=show==undef?false:show;
+  d = d == undef ? 3:d;
+  fn = fn == undef ? 32:fn;
+  if(show==false){ 
+    offset(-d/2,$fn=fn)
+    offset(d/2,$fn=fn)
+    children();
+  }
+  else
+  {
+    color("green")
+    linear_extrude(1)
+    children();
+    color("red")
+    linear_extrude(0.5)
+    difference()
+    {
+      offset(-d/2,$fn=fn)
+      offset(d/2,$fn=fn)
+      children();
+      children();
+    }
+  }
+}
+```
+
+### chull
+
+```
+module chull                  (m){ 
+  union()
+  for(i=[0:$children-2]){
+    hull(){
+      children(m==true?0:i);
+      children(i+1);
+    }
+  }
+}
+```
+
 ### fibo
 ```
 module fibo                   (s,n,r){
@@ -125,19 +168,7 @@ module pythatree              (a,h,sp,maxit,b,r1,r2,s,d,c1,c2,col){
 }
 ```
 
-### chull
 
-```
-module chull                  (m){ 
-  union()
-  for(i=[0:$children-2]){
-    hull(){
-      children(m==true?0:i);
-      children(i+1);
-    }
-  }
-}
-```
 ### ring
 ```
 module ring                   (d,n,m){
@@ -160,5 +191,18 @@ module ring                   (d,n,m){
 module rotate2                (){
   rotate([45,90-atan(sqrt(2)),0])
   children();
+}
+```
+### skew
+```
+module skew                   (XY,XZ,YX,YZ,ZX,ZY){  
+  matrice=[ 
+    [1,XY,XZ,0], //[redimX, skewXY, skewXZ,translateX]
+    [YX,1,YZ,0], //[SkewYX,RedimY,SkewYZ,translateY]
+    [ZX,ZY,1,0] //[SkewZX, SkewZY,redimZ,TranslateZ]
+  ]; 
+  multmatrix(matrice){
+    children();
+  }
 }
 ```
