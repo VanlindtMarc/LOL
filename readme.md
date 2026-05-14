@@ -54,33 +54,62 @@ pi        = 3.141592654/1;
 tau       = pi*2;
 ```
 # Nouvelles fonctions
-## random
+## Sur nombres
+### random
 ```
 function random    (n,s,pos)       = rands(pos==undef?0:pos==true?0:-n,n,1,s==undef?n:s)[0];
 ```
-## fibonacci
+### fibonacci
 ```
 function fibonacci (n,a=0,b=1,c=1) = c<n+1?fibonacci(a=b,b=a+b,c=c+1,n=n):a;
 ```
 
-## hypo
+### hypo
 ```
 function hypo      (a,b)           = sqrt((a*a)+(b*b));
 ```
-## imaginary
+### imaginary
 ```
 function imaginary (a,b,c)         = (2*a*b)+c;    
 ```
-## pair
+### pair
 ```
 function pair      (a)             = a%2==0?true:false;
 ```
 
-## real
+### real
 ```
 function real      (a,b,c)         = ((a*a)+(b*b))+c;
 ```
+## Sur tables
+### invert
+```
+function invert  (a)               = let(b=[for(i=[0:len(a)-1]) a[(len(a)-1)-i]])b;
+```
 
+### moyenne
+```
+function moyenne  (a,b=0,c=0)       = b<len(a)?sum(a=a,b=b+1,c=c+a[b])/len(a):c;
+```
+### sort
+```
+function sort    (a,invert=false)  = len(a) == 0 ? [] : let (
+      b=floor(len(a)/2),
+      c=[for(i=a) if (i<a[b]) i],
+      d=[for(i=a) if (i>a[b]) i],
+      e=[for(i=a) if (i==a[b]) i]
+    ) 
+    invert==false?concat(sort(c),e,sort(d)):invert(concat(sort(c),e,sort(d)));
+```
+### sum
+```
+function sum     (a,b=0,c=0,n)       = b<(n==undef?len(a):n)?sum(a=a,b=b+1,c=c+a[b],n=n):c;
+```
+### topct
+```
+function topct   (a)               = a/sum(a);
+```
+---
 # Modules ajoutés
 
 ## cnc
